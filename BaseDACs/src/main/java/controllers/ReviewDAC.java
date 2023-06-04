@@ -14,6 +14,14 @@ public class ReviewDAC {
         return retval;
     }
 
+    public static ArrayList<String> getReviewsOfUser(int userID) throws SQLException {
+        ResultSet result = DAC.getSet(String.format("SELECT text_review FROM Reviews WHERE user_id = %d", userID));
+        ArrayList<String> retval = new ArrayList<>();
+        while (result.next()){
+            retval.add(result.getString(1));
+        }
+        return retval;
+    }
     public static void setUpvoteCounter(int id) throws SQLException {
         DAC.exec(String.format("""
                 UPDATE Reviews

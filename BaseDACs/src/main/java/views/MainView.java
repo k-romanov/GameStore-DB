@@ -18,8 +18,7 @@ public class MainView extends View{
                         SearchView.show();
                         break;
                     case 2:
-                        //TODO: ProfileView
-                        System.out.println("Coming soon!");
+                        ProfileView.show();
                         break;
                 }
             }
