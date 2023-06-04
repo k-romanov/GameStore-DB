@@ -29,6 +29,12 @@ public class GameListView extends View{
                 System.out.println(String.format("%d: %s", lb + count, games.getString("game_title")));
                 count += 1;
             }
+            System.out.println("""
+                    1. Next Page
+                    2. Prev Page
+                    3. View Game
+                    4. Edit Game
+                    5. Back""");
             choice = Integer.parseInt(new Scanner(System.in).nextLine());
             switch(choice) {
                 case(1): lb += 1;
@@ -40,7 +46,7 @@ public class GameListView extends View{
                         gameChoice = Integer.parseInt(new Scanner(System.in).nextLine());
                     }
                     games.absolute(gameChoice);
-                    GameView.view(games.getString("game_id"));
+                    GameView.view(games.getInt("game_id"));
                 }
                 case(4):{
                     if(!isAdmin){
