@@ -25,6 +25,12 @@ public class ReviewDAC {
         return retval;
     }
 
+    public static void addReview(int gameID, int text, int score) throws SQLException {
+        DAC.exec(String.format("INSERT INTO gamestore.Reviews (score, game_id, user_id, text_review, upvote_countdown, downvote_countdown, funny_countdown) " +
+                "VALUES(%d, %d, %d, %s, 0, 0, 0)", score, gameID, loginID, text));
+    }
+
+
     public static void setUpvoteCounter(int id) throws SQLException {
         DAC.exec(String.format("""
                 UPDATE Reviews
