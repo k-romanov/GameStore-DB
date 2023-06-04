@@ -8,8 +8,12 @@ import java.util.Scanner;
 
 public class GameListView extends View{
     private String _queryString = null;
+    private int _userID = -1;
     public void addQuery(String query){
         _queryString = query;
+    }
+    public void addUser(int userID){
+        _userID = userID;
     }
     public void view() throws SQLException {
         int choice = 0;
@@ -19,6 +23,9 @@ public class GameListView extends View{
             ResultSet games;
             if(_queryString != null) {
                 games = GameDAC.getGameListByQuery(_queryString, lb * mul, (lb + 1) * mul);
+            }
+            else if(_userID > 0) {
+                games = GameDAC.getGameListByUser(_userID, lb * mul, (lb + 1) * mul);
             }
             else {
                 games = GameDAC.getGameList(lb * mul, (lb + 1) * mul);

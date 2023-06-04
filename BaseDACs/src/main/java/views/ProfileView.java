@@ -1,5 +1,6 @@
 package views;
 
+import controllers.GameDAC;
 import controllers.ReviewDAC;
 
 import java.sql.SQLException;
@@ -28,12 +29,18 @@ public class ProfileView extends View{
                         }
                         int counter = 1;
                         for (String review: reviews){
-                            System.out.println(Integer.toString(counter) + ". " + review);
+                            System.out.println(counter + ". " + review);
                         }
                         break;
                     case 2:
-                        //TODO: GameDAC
-                        System.out.println("Coming soon!");
+                        try {
+                            GameListView list = new GameListView();
+                            list.addUser(id);
+                            list.view();
+                        }
+                        catch(SQLException e){
+                            System.out.println("Oops!");
+                        }
                         break;
                     case 3:
                         return;

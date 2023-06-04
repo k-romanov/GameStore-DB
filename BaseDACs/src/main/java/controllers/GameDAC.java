@@ -13,9 +13,13 @@ public class GameDAC extends DAC {
 
     public static ResultSet getGameListByQuery(String name, int start, int end) throws SQLException {
         return DAC.getSet(String.format("SELECT game_id, game_title from Games where (LOCATE(%s, game_title) > 0) ORDER BY game_id LIMIT %d,%d", name, start, end));
+    }
 
+    public static ResultSet getGameListByUser(int userID, int start, int end) throws SQLException {
+        return DAC.getSet(String.format("SELECT game_id, game_title from Games WHERE publisher_id = %d ORDER BY game_id LIMIT %d,%d", userID, start, end));
 
     }
+
     public static void publishGame(String name, String description, int price) throws SQLException {
         DAC.exec(String.format("INSERT INTO gamestore.Games (game_title, publisher_id, on_sale, price, sale_amount, description) " +
                 "VALUES(%s, %d, 0, %d, 0, %s)", name, loginID, price, description));

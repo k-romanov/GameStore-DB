@@ -18,19 +18,21 @@ public class SearchView extends View {
                 System.out.println("Wrong input! Try again!");
             }
             else{
+                GameListView list = new GameListView();
                 switch (choice){
                     case 1:
                         System.out.println("Enter the game name:");
                         String gamename = new Scanner(System.in).nextLine();
-                        //TODO: GameDAC
+                        list.addQuery(gamename);
+                        list.view();
                         break;
                     case 2:
-                        // GamesView.show();
+                        list.view();
                         break;
                     case 3:
                         System.out.println("Enter the username");
                         String username = new Scanner(System.in).nextLine();
-                        int userID = 0;
+                        int userID;
                         try {
                             userID = UsersDAC.getUserID(username);
                         } catch (SQLException e){
