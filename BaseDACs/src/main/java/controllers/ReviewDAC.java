@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class ReviewDAC {
     public static ResultSet getReviews(int gameID, int start, int end) throws SQLException {
         return DAC.getSet(String.format("SELECT review_id, text_review, upvote_countdown, downvote_countdown, funny_countdown " +
-                        "FROM Reviews JOIN Games ON Games.game_id = Reviews.game_id WHERE user_id = %d LIMIT %d, %d", gameID, start, end));
+                        "FROM Reviews JOIN Games ON Games.game_id = Reviews.game_id WHERE Games.game_id = %d LIMIT %d, %d", gameID, start, end));
     }
 
     public static void updateReview(int reviewID, String review) throws SQLException {

@@ -26,6 +26,7 @@ public class Main {
                 System.out.println("Wrong username or password!");
                 return;
             }
+            DAC.setLoginID(UsersDAC.getUserID(username));
             View.setId(UsersDAC.getUserID(username));
             if(UsersDAC.checkAdmin(username)){
                 System.out.println("You are an admin!");

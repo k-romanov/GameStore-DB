@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class GameView extends View{
     public static void view(int gameID) throws SQLException {
         ResultSet game = GameDAC.getGameInfo(gameID);
+        game.next();
         System.out.println(game.getString("game_title"));
         int choice = 0;
 
@@ -24,11 +25,23 @@ public class GameView extends View{
                 """);
             choice = Integer.parseInt(new Scanner(System.in).nextLine());
             switch(choice){
-                case(1): System.out.println(game.getString("description"));
-                case(2): ReviewListView.view(gameID);
-                case(3): System.out.println(TagsDAC.getTags(gameID));
-                case(4): DLCListView.view(gameID);
-                case(5): System.out.println("TODO");
+                case(1):
+                    System.out.println(game.getString("description"));
+                    break;
+                case(2):
+                    ReviewListView.view(gameID);
+                    break;
+                case(3):
+                    System.out.println(TagsDAC.getTags(gameID));
+                    break;
+                case(4):
+                    DLCListView.view(gameID);
+                    break;
+                case(5):
+                    System.out.println("TODO");
+                    break;
+                case(6):
+                    return;
             }
         }
     }
