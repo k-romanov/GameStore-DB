@@ -12,7 +12,7 @@ public class GameDAC extends DAC {
     }
 
     public static ResultSet getGameListByQuery(String name, int start, int end) throws SQLException {
-        return DAC.getSet(String.format("SELECT game_id, game_title from Games where (LOCATE(%s, game_title) > 0) ORDER BY game_id LIMIT %d,%d", name, start, end));
+        return DAC.getSet(String.format("SELECT game_id, game_title from Games where (LOCATE('%s', game_title) > 0) ORDER BY game_id LIMIT %d,%d", name, start, end));
     }
 
     public static ResultSet getGameListByUser(int userID, int start, int end) throws SQLException {
