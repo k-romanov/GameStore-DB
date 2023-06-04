@@ -13,6 +13,7 @@ public class SalesDAC extends DAC{
     }
 
     public static void setSale(int buyerID, int userID, int gameID, int price) throws SQLException {
-        DAC.exec(String.format("INSERT INTO gamestore.Sales (buyer_id, reciever_id, game_id, price) VALUES(%d, %d, %d, %d)", buyerID, userID, gameID, price));
+        DAC.exec(String.format("INSERT INTO gamestore.Sales (buyer_id, reciever_id, game_id, price) " +
+                "vALUES(%d, %d, %d, %d)", buyerID, userID, gameID, price));
     }
 }
