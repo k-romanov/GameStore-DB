@@ -5,13 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ReviewDAC {
-    public static ArrayList<String> getReviews(int gameId) throws SQLException {
-        ResultSet result = DAC.getSet(String.format("SELECT review_id, text_review FROM Reviews WHERE game_id = %d", gameId));
-        ArrayList<String> retval = new ArrayList<>();
-        while (result.next()){
-            retval.add(result.getInt(1) + ". " + result.getString(2));
-        }
-        return retval;
+    public static ResultSet getReviews(int gameID, int start, int end) throws SQLException {
+        return DAC.getSet(String.format("SELECT review_id, text_review, upvote_countdown, downvote_count, funny_count " +
+                        "FROM Reviews JOIN Games ON Games.game_id = Reviews.game_id WHERE user_id = %d LIMIT %d, %d", gameID, start, end));
     }
 
     public static void updateReview(int reviewID, String review) throws SQLException {

@@ -1,92 +1,64 @@
 package views;
 
+import controllers.DLCDAC;
 import controllers.ReviewDAC;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class ReviewListView extends View{
-    public static void view() {
-        while (true){
+import static views.View.isAdmin;
+
+public class ReviewListView {
+    public void view(int gameID) throws SQLException {
+        int choice = 0;
+        int lb = 0;
+        int mul = 10;
+        while(choice != 5){
+            ResultSet reviews = ReviewDAC.getReviews(gameID, lb * mul, (lb + 1) * mul);
+            reviews.beforeFirst();
+            int count = 1;
+            while(reviews.next()){
+                System.out.println(lb + count + reviews.getString("text_review"));
+                System.out.println("Up: " + reviews.getInt("upvote_countdown") +
+                                   " Down: " + reviews.getInt("downvote_countdown") +
+                                   " Funny: " + reviews.getInt("funny_countdown"));
+                count += 1;
+            }
             System.out.println("""
-                    1. Upvote review
-                    2. Downvote review
-                    3. Set review as funny
-                    4. Edit review
-                    5. Delete review
-                    6. Back""");
-            int choice = Integer.parseInt(new Scanner(System.in).nextLine());
-            if(choice < 1 || choice > 6) {
-                System.out.println("Wrong input! Try again!");
-            } else {
-                switch (choice) {
-                    case 1 -> {
-                        System.out.print("Enter review_id:");
-                        int reviewID = Integer.parseInt(new Scanner(System.in).nextLine());
-                        try {
-                            ReviewDAC.setUpvoteCounter(reviewID);
-                        } catch (SQLException e) {
-                            System.out.println("This review does not exist!");
-                            break;
-                        }
-                        System.out.println("Upvote counter has been increaced by one!");
+                    1. Next Page
+                    2. Prev Page
+                    3. View Review
+                    4. Edit Review
+                    5. Back""");
+            choice = Integer.parseInt(new Scanner(System.in).nextLine());
+            switch (choice) {
+                case (1) -> lb += 1;
+                case (2) -> {
+                    if (lb >= 1) {
+                        lb -= 1;
                     }
-                    case 2 -> {
-                        System.out.print("Enter review_id:");
-                        int reviewID = Integer.parseInt(new Scanner(System.in).nextLine());
-                        try {
-                            ReviewDAC.setDownvoteCounter(reviewID);
-                        } catch (SQLException e) {
-                            System.out.println("This review does not exist!");
-                            break;
-                        }
-                        System.out.println("Downvote counter has been increaced by one!");
+                }
+                case (3) -> {
+                    int reviewChoice = Integer.parseInt(new Scanner(System.in).nextLine());
+                    while ((reviewChoice < 0) || (reviewChoice >= mul)) {
+                        System.out.println("Invalid DLC number!");
+                        reviewChoice = Integer.parseInt(new Scanner(System.in).nextLine());
                     }
-                    case 3 -> {
-                        System.out.print("Enter review_id:");
-                        int reviewID = Integer.parseInt(new Scanner(System.in).nextLine());
-                        try {
-                            ReviewDAC.setFunnyCounter(reviewID);
-                        } catch (SQLException e) {
-                            System.out.println("This review does not exist!");
-                            break;
+                    reviews.absolute(reviewChoice);
+                    ReviewView.view(reviews.getInt("dlc_id"));
+                }
+                case (4) -> {
+                    if (!isAdmin) {
+                        System.out.println("Not an admin!");
+                    } else {
+                        int gameChoice = Integer.parseInt(new Scanner(System.in).nextLine());
+                        while ((gameChoice < 0) || (gameChoice >= mul)) {
+                            System.out.println("Invalid DLC number!");
+                            gameChoice = Integer.parseInt(new Scanner(System.in).nextLine());
                         }
-                        System.out.println("Funny counter has been increaced by one!");
-                    }
-                    case 4 -> {
-                        System.out.println("Enter review_id:");
-                        int reviewID = Integer.parseInt(new Scanner(System.in).nextLine());
-                        try{
-                            int userID = ReviewDAC.getUserIDByReview(reviewID);
-                            if(userID == id || isAdmin){
-                                System.out.print("Enter new review text: ");
-                                String reviewText = new Scanner(System.in).nextLine();
-                                ReviewDAC.updateReview(reviewID, reviewText);
-                            }
-                            else {
-                                System.out.println("You are not allowed to edit this review!");
-                            }
-                        } catch (SQLException e){
-                            System.out.println("Review not found!");
-                        }
-                    }
-                    case 5 -> {
-                        System.out.println("Enter review_id:");
-                        int reviewID = Integer.parseInt(new Scanner(System.in).nextLine());
-                        try{
-                            int userID = ReviewDAC.getUserIDByReview(reviewID);
-                            if(userID == id || isAdmin){
-                                ReviewDAC.removeReview(reviewID);
-                            }
-                            else {
-                                System.out.println("You are not allowed to remove this review!");
-                            }
-                        } catch (SQLException e){
-                            System.out.println("Review not found!");
-                        }
-                    }
-                    case 6 ->{
-                        return;
+                        reviews.absolute(gameChoice);
+                        DLCDAC.removeDLC(reviews.getInt("dlc_id"));
                     }
                 }
             }

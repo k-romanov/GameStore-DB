@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class DLCListView extends View{
-    public void view(int gameID) throws SQLException {
+    public static void view(int gameID) throws SQLException {
         int choice = 0;
         int lb = 0;
         int mul = 10;
