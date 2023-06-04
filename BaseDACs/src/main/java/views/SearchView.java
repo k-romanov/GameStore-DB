@@ -25,7 +25,7 @@ public class SearchView extends View {
                         //TODO: GameDAC
                         break;
                     case 2:
-                        //TODO: GameDAC
+                        // GamesView.show();
                         break;
                     case 3:
                         System.out.println("Enter the username");

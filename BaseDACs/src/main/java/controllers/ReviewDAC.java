@@ -4,18 +4,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static controllers.DAC.loginID;
-
 public class ReviewDAC {
     public static ArrayList<String> getReviews(int gameId) throws SQLException {
-        ResultSet result = DAC.getSet(String.format("SELECT text_review FROM Reviews WHERE game_id = %d", gameId));
+        ResultSet result = DAC.getSet(String.format("SELECT review_id, text_review FROM Reviews WHERE game_id = %d", gameId));
         ArrayList<String> retval = new ArrayList<>();
-        while (result.next()) {
-            retval.add(result.getString(1));
+        while (result.next()){
+            retval.add(result.getInt(1) + ". " + result.getString(2));
         }
         return retval;
     }
 
+    public static void updateReview(int reviewID, String review) throws SQLException {
+        DAC.exec(String.format("""
+                UPDATE Reviews
+                SET text_review= %s
+                WHERE review_id=%d""", review, reviewID));
+    }
+    public static int getUserIDByReview(int reviewID) throws SQLException {
+        ResultSet result = DAC.getSet(String.format("SELECT user_id FROM Reviews WHERE review_id = %d", reviewID));
+        result.next();
+        return result.getInt(1);
+    }
     public static ArrayList<String> getReviewsOfUser(int userID) throws SQLException {
         ResultSet result = DAC.getSet(String.format("SELECT text_review FROM Reviews WHERE user_id = %d", userID));
         ArrayList<String> retval = new ArrayList<>();
@@ -24,13 +33,6 @@ public class ReviewDAC {
         }
         return retval;
     }
-
-    public static void addReview(int gameID, int text, int score) throws SQLException {
-        DAC.exec(String.format("INSERT INTO gamestore.Reviews (score, game_id, user_id, text_review, upvote_countdown, downvote_countdown, funny_countdown) " +
-                "VALUES(%d, %d, %d, %s, 0, 0, 0)", score, gameID, loginID, text));
-    }
-
-
     public static void setUpvoteCounter(int id) throws SQLException {
         DAC.exec(String.format("""
                 UPDATE Reviews
@@ -50,5 +52,12 @@ public class ReviewDAC {
                 UPDATE Reviews
                 SET funny_countdown= funny_countdown + 1
                 WHERE review_id=%d""", id));
+    }
+
+    public static void removeReview(int reviewID) throws SQLException {
+        DAC.exec(String.format("""
+                    DELETE FROM Reviews
+                    WHERE review_id=%d;
+                    """, reviewID));
     }
 }
