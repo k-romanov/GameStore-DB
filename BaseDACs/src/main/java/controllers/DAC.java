@@ -12,6 +12,8 @@ public abstract class DAC {
     private static Connection connection;
     @Setter
     protected static boolean isAdmin = false;
+    @Setter
+    protected static int loginID;
     public static ResultSet getSet(String query) throws SQLException {
         Statement statement = connection.createStatement();
         return statement.executeQuery(query);

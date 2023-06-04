@@ -1,39 +1,31 @@
 package views;
 
+import controllers.DLCDAC;
 import controllers.GameDAC;
+import controllers.ReviewDAC;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class GameListView extends View{
-    private String _queryString = null;
-    public void addQuery(String query){
-        _queryString = query;
-    }
-    public void view() throws SQLException {
+public class DLCListView extends View{
+    public void view(int gameID) throws SQLException {
         int choice = 0;
         int lb = 0;
         int mul = 10;
         while(choice != 5){
-            ResultSet games;
-            if(_queryString != null) {
-                games = GameDAC.getGameListByQuery(_queryString, lb * mul, (lb + 1) * mul);
-            }
-            else {
-                games = GameDAC.getGameList(lb * mul, (lb + 1) * mul);
-            }
-            games.beforeFirst();
+            ResultSet dlcs = DLCDAC.getDLCs(gameID, lb * mul, (lb + 1) * mul);
+            dlcs.beforeFirst();
             int count = 1;
-            while(games.next()){
-                System.out.println(lb + count + games.getString("game_title"));
+            while(dlcs.next()){
+                System.out.println(lb + count + dlcs.getString("name"));
                 count += 1;
             }
             System.out.println("""
                     1. Next Page
                     2. Prev Page
-                    3. View Game
-                    4. Edit Game
+                    3. View DLC
+                    4. Edit DLC
                     5. Back""");
             choice = Integer.parseInt(new Scanner(System.in).nextLine());
             switch (choice) {
@@ -46,11 +38,11 @@ public class GameListView extends View{
                 case (3) -> {
                     int gameChoice = Integer.parseInt(new Scanner(System.in).nextLine());
                     while ((gameChoice < 0) || (gameChoice >= mul)) {
-                        System.out.println("Invalid game number!");
+                        System.out.println("Invalid DLC number!");
                         gameChoice = Integer.parseInt(new Scanner(System.in).nextLine());
                     }
-                    games.absolute(gameChoice);
-                    GameView.view(games.getInt("game_id"));
+                    dlcs.absolute(gameChoice);
+                    DLCView.view(dlcs.getInt("dlc_id"));
                 }
                 case (4) -> {
                     if (!isAdmin) {
@@ -58,11 +50,11 @@ public class GameListView extends View{
                     } else {
                         int gameChoice = Integer.parseInt(new Scanner(System.in).nextLine());
                         while ((gameChoice < 0) || (gameChoice >= mul)) {
-                            System.out.println("Invalid game number!");
+                            System.out.println("Invalid DLC number!");
                             gameChoice = Integer.parseInt(new Scanner(System.in).nextLine());
                         }
-                        games.absolute(gameChoice);
-                        GameDAC.removeGame(games.getInt("game_id"));
+                        dlcs.absolute(gameChoice);
+                        DLCDAC.removeDLC(dlcs.getInt("dlc_id"));
                     }
                 }
             }

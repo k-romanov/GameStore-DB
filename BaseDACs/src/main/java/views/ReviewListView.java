@@ -5,8 +5,8 @@ import controllers.ReviewDAC;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class ReviewsView extends View{
-    public static void show() {
+public class ReviewListView extends View{
+    public static void view() {
         while (true){
             System.out.println("""
                     1. Upvote review
