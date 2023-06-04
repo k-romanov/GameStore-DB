@@ -15,7 +15,8 @@ public abstract class DAC {
     @Setter
     protected static int loginID;
     public static ResultSet getSet(String query) throws SQLException {
-        Statement statement = connection.createStatement();
+        Statement statement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
         return statement.executeQuery(query);
     }
     public static void exec(String query) throws SQLException {
