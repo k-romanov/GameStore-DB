@@ -1,10 +1,11 @@
 import controllers.DAC;
 import controllers.ReviewDAC;
 import controllers.UsersDAC;
+import views.MainView;
+import views.View;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Scanner;
@@ -23,21 +24,15 @@ public class Main {
                 System.out.println("Welcome, " + username);
             } else{
                 System.out.println("Wrong username or password!");
+                return;
             }
+            View.setId(UsersDAC.getUserID(username));
             if(UsersDAC.checkAdmin(username)){
                 System.out.println("You are an admin!");
                 DAC.setAdmin(true);
+                View.setAdmin(true);
             }
-            System.out.print("Search for a user id:");
-            String search = scanner.nextLine();
-            for(int i: UsersDAC.getUserIDs(search)){
-                System.out.println(UsersDAC.getUserName(i));
-            }
-            System.out.println("Get game reviews");
-            int id = Integer.parseInt(scanner.nextLine());
-            for (String i: ReviewDAC.getReviews(id)){
-                System.out.println(i);
-            }
+            MainView.show();
         } catch (SQLException e) {
             e.printStackTrace();
         }
