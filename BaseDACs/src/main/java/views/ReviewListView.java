@@ -10,7 +10,7 @@ import java.util.Scanner;
 import static views.View.isAdmin;
 
 public class ReviewListView {
-    public void view(int gameID) throws SQLException {
+    public static void view(int gameID) throws SQLException {
         int choice = 0;
         int lb = 0;
         int mul = 10;

@@ -25,7 +25,7 @@ public class GameView extends View{
             choice = Integer.parseInt(new Scanner(System.in).nextLine());
             switch(choice){
                 case(1): System.out.println(game.getString("description"));
-                case(2): ReviewView.view(gameID);
+                case(2): ReviewListView.view(gameID);
                 case(3): System.out.println(TagsDAC.getTags(gameID));
                 case(4): DLCListView.view(gameID);
                 case(5): System.out.println("TODO");
